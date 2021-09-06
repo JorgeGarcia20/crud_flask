@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block body %}
+<h1 class="text-center mb-4">Bienvenido a mi tienda</h1>
+<div class="col-md-4 offset-md-4">
+
+  <div class="card card-body">
+    <h2 class="text-center mb-4">Ingresa tus datos</h2>
+    <form action="/login" method="POST">
+      <div>
+        <img class="img-fluid d-block mx-auto" src="{{url_for('static', filename='img/icon-tienda.png')}}" alt=""
+          width="100">
+      </div>
+      <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+      <div class="form-group mb-2">
+        <label for="nick" class="form-label">Nick</label>
+        <input type="text" class="form-control" name="nick" required>
+      </div>
+      <div class="form-group mb-2">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="password" required>
+      </div>
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+      </div>
+      <div class="mt-4 text-center">
+        <a href="{{url_for('nuevo_cliente')}}">¿No tienes una cuenta? crea una nueva ahora!</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

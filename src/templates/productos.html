@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+{% include 'navbar.html'%}
+{% block body %}
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="card card-body">
+      <h1 class="text-center mb-4">Nuevo producto</h1>
+
+      <form action="/agregar_producto" method='POST'>
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+        <div class="form-group mb-2">
+          <label for="nombre" class="form-label">Nombre del producto</label>
+          <input class="form-control" type="text" name="nombre">
+        </div>
+        <div class="form-group mb-2">
+          <label for="marca" class="form-label">Marca</label>
+          <input class="form-control" type="text" name="marca">
+        </div>
+
+        <div class="form-group mb-2">
+          <label for="proveedor" class="form-label">Proveedor</label>
+          <select class="form-select" name="proveedor" id="">
+            {% for provedor in data.proveedores %}
+            <option value="{{provedor.id}}">{{provedor.nombre}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group mb-2">
+          <label for="categoria" class="form-label">Categoria</label>
+          <select class="form-select" name="categoria" id="">
+            {% for categoria in data.categorias %}
+            <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group mb-2">
+          <label for="precio" class="form-label">Precio</label>
+          <input class="form-control" type="text" name="precio">
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="col-md-9">
+    <div class="card card-body">
+      <h1 class="text-center">Lista de Productos</h1>
+      <table class="table table-striped table-hover table-bordered table-sm bg-white">
+        <thead>
+          <tr>
+            <td>Nombre</td>
+            <td>Marca</td>
+            <td>Proveedor</td>
+            <td>Categoria</td>
+            <td>Precio</td>
+            <td>Acciones</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in data.productos %}
+          <tr>
+            <td>{{p.nombre}}</td>
+            <td>{{p.marca}}</td>
+            <td>{{p.id_proveedor}}</td>
+            <td>{{p.id_categoria}}</td>
+            <td>{{p.precio}}</td>
+            <td>
+              <a class="btn btn-warning" href="actualizar_producto/{{p.id_producto}}">Editar</a>
+              <a class="btn btn-danger btn-delete" href="eliminar_producto/{{p.id_producto}}">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+{% endblock %}
