@@ -3,7 +3,7 @@ CREATE DATABASE tienda_test CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE tienda_test;
 
 CREATE TABLE cliente(
-  id_cliente INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(30) NOT NULL,
   apellidos VARCHAR(50) NOT NULL,
   nick VARCHAR(20) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE cliente(
   correo VARCHAR(60) NOT NULL,
   rfc VARCHAR(10) NOT NULL,
   direccion VARCHAR(250) NOT NULL,
-  PRIMARY KEY(id_cliente)
+  PRIMARY KEY(id)
 );
 
 CREATE TABLE proveedor(
@@ -40,9 +40,9 @@ CREATE TABLE producto(
 
 CREATE TABLE venta(
   id_venta INT NOT NULL AUTO_INCREMENT,
-  fecha SMALLDATETIME NOT NULL,
-  factura BOOLEAN NOT NULL
-  total DECIMA(5,2),
+  fecha DATETIME NOT NULL,
+  factura TINYINT(1) NOT NULL,
+  total DECIMAL(5,2),
   PRIMARY KEY(id_venta)
 );
 
@@ -50,8 +50,15 @@ CREATE TABLE detalle_venta(
   id_detalle_venta INT NOT NULL AUTO_INCREMENT,
   id_venta INT NOT NULL,
   id_cliente INT NOT NULL,
-  id_producto INT NOT NULL
+  id_producto INT NOT NULL,
+  FOREIGN KEY(id_venta) REFERENCES venta(id_venta),
+  FOREIGN KEY(id_cliente) REFERENCES cliente(id),
+  FOREIGN KEY(id_producto) REFERENCES producto(id_producto),
+  PRIMARY KEY(id_detalle_venta)
 );
+
+INSERT INTO cliente(nombre, apellidos, nick, password, correo, rfc, direccion)
+VALUE ('Jorge', 'Garcia Estrada', 'jorgegarcia', 'pbkdf2:sha256:260000$JJVqzW0AXKMuUQXr$ec2795ab8a7ae82df79eee2e477fc405524d66fbcb867fe16c81d227a7aac0b6', 'jorge@outlook.com', 'GAEJ991020', 'Francisco Villa s/n Tepetzongo');
 
 INSERT INTO proveedor(nombre) VALUES
 ('Bimbo SA de CV'), 

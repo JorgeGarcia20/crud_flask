@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+
 {% block body %}
 <h1 class="text-center mb-4">Registro de nuevo cliente</h1>
 <div class="col-md-4 offset-md-4">
@@ -6,47 +7,61 @@
   <div class="card card-body">
     <h2 class="text-center mb-4">Ingresa tus datos</h2>
 
-    <form action="/registrar_cliente" method="POST">
+    <form action="/registrar_cliente" id="registro" method="POST">
       <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
       <div class="form-group mb-2">
         <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" name="nombre">
+        <input type="text" class="form-control campo-valido" name="nombre" id="nombre" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="apellidos" class="form-label">Apellidos</label>
-        <input type="text" class="form-control" name="apellidos">
+        <input type="text" class="form-control" name="apellidos" id="apellidos" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="nick" class="form-label">Nick</label>
-        <input type="text" class="form-control" name="nick">
+        <input type="text" class="form-control" name="nick" id="nick" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="password" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" name="password">
+        <input type="password" class="form-control" name="password" id="password" required>
       </div>
+
       <div class="form-group mb-2">
-        <label for="password_check" class="form-label">Escribe de nuevo tu contraseña</label>
-        <input type="password" class="form-control" name="password_check">
+        <label for="password2" class="form-label">Escribe de nuevo tu contraseña</label>
+        <input type="password" class="form-control" name="password2" id="password2" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="correo" class="form-label">Correo</label>
-        <input type="email" class="form-control" name="correo">
+        <input type="email" class="form-control" name="correo" id="correo" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="rfc" class="form-label">RFC</label>
-        <input type="number" class="form-control" name="rfc">
+        <input type="text" class="form-control" name="rfc" id="rfc" required>
       </div>
+
       <div class="form-group mb-2">
         <label for="direccion" class="form-label">Direccion</label>
-        <input type="text" class="form-control" name="direccion">
+        <input type="text" class="form-control" name="direccion" id="direccion" required>
       </div>
+
       <div class="text-center mt-4">
         <button type="submit" class="btn btn-primary">Registrar</button>
       </div>
+
       <div class="mt-4 text-center">
         <a href="{{url_for('login')}}">¿Ya tienes una cuenta? Inicia sesion ahora!</a>
       </div>
+
     </form>
   </div>
 </div>
+{% endblock %}
+{% block customJS%}
+<script src="{{url_for('static', filename='js/validation.js')}}"></script>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-6">
     <div class="card card-body">
       <h1 class="text-center mb-4">Nueva venta</h1>
 
@@ -12,23 +12,23 @@
 
         <div class="form-group mb-2">
           <label for="nombre" class="form-label">Nombre del cliente</label>
-          <input class="form-control" type="text" name="nombre">
+          <input class="form-control" type="text" name="nombre" value="{{ current_user.nombre }}">
         </div>
         <div class="form-group mb-2">
           <label for="apellidos" class="form-label">Apellidos del cliente</label>
-          <input class="form-control" type="text" name="apellidos">
+          <input class="form-control" type="text" name="apellidos" value="{{ current_user.apellidos }}">
         </div>
         <div class="form-group mb-2">
           <label for="correo" class="form-label">Correo del cliente</label>
-          <input class="form-control" type="text" name="correo">
+          <input class="form-control" type="text" name="correo" value="{{ current_user.correo }}">
         </div>
         <div class="form-group mb-2">
           <label for="rfc" class="form-label">RFC</label>
-          <input class="form-control" type="text" name="rfc">
+          <input class="form-control" type="text" name="rfc" value="{{ current_user.rfc }}">
         </div>
         <div class="form-group mb-2">
           <label for="direccion" class="form-label">Direccion</label>
-          <input class="form-control" type="text" name="correo">
+          <input class="form-control" type="text" name="correo" value="{{ current_user.direccion }}">
         </div>
 
         <div>
@@ -51,12 +51,14 @@
           <thead>
             <tr class="text-center">
               <td>Nombre</td>
+              <td>Categoria</td>
               <td>Acciones</td>
             </tr>
           </thead>
           <tbody>
             <tr class="text-center">
-              <td>-----</td>
+              <td></td>
+              <td></td>
               <td>
                 <a class="btn btn-success" href="#">Quitar</a>
               </td>
@@ -79,13 +81,14 @@
     </div>
   </div>
 
-  <div class="col-md-8">
+  <div class="col-md-6">
     <div class="card card-body">
       <h1 class="text-center">Productos</h1>
       <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
           <tr class="text-center">
             <td>Nombre</td>
+            <td>Categoria</td>
             <td>Precio</td>
             <td>Acciones</td>
           </tr>
@@ -94,6 +97,7 @@
           {% for p in data.productos %}
           <tr class="text-center">
             <td>{{p.nombre}}</td>
+            <td>{{p.id_categoria}}</td>
             <td>{{p.precio}}</td>
             <td>
               <a class="btn btn-success" href="#">Comprar</a>

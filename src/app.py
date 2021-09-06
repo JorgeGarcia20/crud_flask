@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_wtf.csrf import CSRFProtect
+from flask import Flask, render_template, request, url_for, redirect, flash
 from flask_mysqldb import MySQL
+from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
 
@@ -9,6 +9,7 @@ from src.models.entities.cliente import Cliente
 from src.models.ModeloCategoria import ModeloCategoria
 from src.models.ModeloProveedor import ModeloProveedor
 from src.models.ModeloProducto import ModeloProducto
+from src.consts import *
 
 app = Flask(__name__)
 csrf = CSRFProtect()
@@ -18,24 +19,22 @@ login_manager_app = LoginManager(app)
 
 @login_manager_app.user_loader
 def load_user(id):
-    cliente = ModeloCliente.get_id(db, id)
-    return cliente
+    return ModeloCliente.obtener_id(db, id)
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    # CSRF (Cross-site Request Forgery): Solicitud de falsificación entre sitios.
     if request.method == 'POST':
-
-        nick = request.form['nick']
-        password = request.form['password']
-
-        cliente = Cliente(None, None, None, nick, password, None, None, None)
-        cliente_logeado = ModeloCliente.login(db, cliente)
-
-        if cliente_logeado != None:
-            login_user(cliente_logeado)
-            return render_template('index.html')
+        usuario = Cliente(
+            None, None, None, request.form['nick'], request.form['password'], None, None, None)
+        usuario_logeado = ModeloCliente.login(db, usuario)
+        if usuario_logeado != None:
+            login_user(usuario_logeado)
+            flash(BIENVENIDA, 'success')
+            return redirect(url_for('index'))
         else:
+            flash(LOGIN_NO_VALIDO, 'warning')
             return render_template('auth/login.html')
     else:
         return render_template('auth/login.html')
@@ -44,6 +43,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash(LOGOUT, 'success')
     return redirect(url_for('login'))
 
 
@@ -73,8 +73,10 @@ def registrar_cliente():
 
         ModeloCliente.registrar(db, nombre, apellidos, nick,
                                 password, correo, rfc, direccion)
+        flash(NUEVO_CLIENTE, 'success')
         return redirect(url_for('login'))
     else:
+        flash(ALERT, 'warning')
         return render_template('registrar_cliente.html')
 
 

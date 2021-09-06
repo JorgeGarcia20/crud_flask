@@ -13,12 +13,22 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('nueva_venta')}}">Nueva venta</a>
         </li>
-        <li class="nav-item">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <strong>{{ current_user.nick }}</strong>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="{{url_for('logout')}}">Cerrar sesión</a></li>
+          </ul>
+        </li>
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{{ url_for('logout') }}">Cerrar sesión</a>
         </li>
         <span class="navbar-text">
           <strong>{{ current_user.nick }}</strong>
-        </span>
+        </span> -->
       </ul>
     </div>
   </div>

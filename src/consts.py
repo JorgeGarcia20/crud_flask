@@ -1,0 +1,8 @@
+NUEVO_CLIENTE = 'Nuevo cliente registrado'
+LOGIN_NO_VALIDO = '¡Usuario o password incorrectos!'
+LOGOUT = 'Cerraste serion exitosamente'
+BIENVENIDA = 'BIENVENIDO DE NUEVO'
+MOFIDICADO = 'Procuto modificado exitosamente'
+ALERT = 'Algo salio mal'
+ELIMINADO = 'Producto eliminado exitosamente'
+NUEVA_VENTA = 'Nueva venta existosa'
