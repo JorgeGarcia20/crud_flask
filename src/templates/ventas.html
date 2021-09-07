@@ -1,7 +1,17 @@
 {% extends 'layout.html' %}
 {% include 'navbar.html'%}
 {% block body %}
-
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<br>
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong style='font-size: 14px;'>{{message}}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 <div class="row">
   <div class="col-md-12">
     <div class="row">
@@ -13,8 +23,8 @@
           </div>
           <div class="card-body">
             <h5 class="card-title">{{p.nombre}}</h5>
-            <p class="card-text">{{p.precio}}</p>
-            <a href="/comprar_producto/{{p.id_producto}}" class="btn btn-success">Comprar</a>
+            <p class="card-text">{{p.precio}}$</p>
+            <a href="/vender_producto/{{p.id_producto}}" class="btn btn-success">Vender</a>
           </div>
         </div>
       </div>

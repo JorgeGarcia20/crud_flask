@@ -12,6 +12,27 @@
 </div>
 {% endfor %}
 {% endif %}
-
 {% endwith %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      {% for v in data %}
+      <div class="col-sm-12 col-md-4 mb-4">
+        <div class="card">
+          <div class="card-header">
+            {{v.producto}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{v.categoria}}</h5>
+            <p class="card-text">{{v.precio}}$</p>
+            <p class="card-text">{{v.fecha}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

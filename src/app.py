@@ -53,7 +53,8 @@ def logout():
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return render_template('index.html')
+        ventas = ModeloCompra.consultar_productos_cliente(db, current_user.id)
+        return render_template('index.html', data=ventas)
     else:
         return redirect(url_for('login'))
 
@@ -159,13 +160,15 @@ def nueva_venta():
     return render_template('ventas.html', data=productos)
 
 
-@app.route("/comprar_producto/<id_producto>", methods=['GET', 'POST'])
-def comprar_producto(id_producto):
+@app.route("/vender_producto/<id_producto>", methods=['GET', 'POST'])
+def vender_producto(id_producto):
     id_cliente = current_user.id
-    compra = ModeloCompra.comprar(db, id_producto, id_cliente)
-    if compra == None:
+    venta = ModeloCompra.vender(db, id_producto, id_cliente)
+    if venta == None:
+        flash(NUEVA_VENTA, 'success')
         return redirect(url_for('nueva_venta'))
     else:
+        flash(ERROR_VENTA, 'warning')
         return render_template('ventas.html')
 
 
