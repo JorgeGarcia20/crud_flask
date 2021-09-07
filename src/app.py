@@ -3,15 +3,15 @@ from flask_mysqldb import MySQL
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
-import json
 
-from werkzeug.wrappers import response
+from src.models.entities.cliente import Cliente
+from src.models.entities.compra import Compra
 
 from src.models.ModeloCliente import ModeloCliente
-from src.models.entities.cliente import Cliente
 from src.models.ModeloCategoria import ModeloCategoria
 from src.models.ModeloProveedor import ModeloProveedor
 from src.models.ModeloProducto import ModeloProducto
+from src.models.ModeloCompra import ModeloCompra
 from src.consts import *
 
 app = Flask(__name__)
@@ -156,22 +156,17 @@ def eliminar_producto(id_producto):
 @login_required
 def nueva_venta():
     productos = ModeloProducto.consultar_productos(db)
-    data = {
-        'productos': productos
-    }
-    return render_template('ventas.html', data=data)
+    return render_template('ventas.html', data=productos)
 
 
-@app.route("/agregar/<id_producto>")
-def agregar(id_producto):
-    producto = ModeloProducto.consultar_producto(db, id_producto)
-    response = {
-        'id': producto.id_producto,
-        'nombre': producto.nombre,
-        'categoria': producto.id_categoria,
-        'precio': float(producto.precio)
-    }
-    return jsonify(response)
+@app.route("/comprar_producto/<id_producto>", methods=['GET', 'POST'])
+def comprar_producto(id_producto):
+    id_cliente = current_user.id
+    compra = ModeloCompra.comprar(db, id_producto, id_cliente)
+    if compra == None:
+        return redirect(url_for('nueva_venta'))
+    else:
+        return render_template('ventas.html')
 
 
 def start_app(configuration):
