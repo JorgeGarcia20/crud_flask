@@ -50,6 +50,23 @@ class ModeloProducto:
             raise Exception(ex)
 
     @classmethod
+    def consultar_producto(self, db, id_producto):
+        try:
+            cursor = db.connection.cursor()
+            query = """SELECT producto.id_producto, producto.nombre, producto.marca, proveedor.nombre, categoria.nombre, producto.precio
+                        FROM producto
+                        JOIN proveedor ON producto.id_proveedor = proveedor.id_proveedor
+                        JOIN categoria ON producto.id_categoria = categoria.id_categoria
+                        WHERE id_producto = {0}""".format(id_producto)
+            cursor.execute(query)
+            data = cursor.fetchone()
+            producto = Producto(data[0], data[1], data[2],
+                                data[3], data[4], data[5])
+            return producto
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
     def editar_producto(self, db, nombre, marca, id_proveedor, id_categoria, precio, id_producto):
         try:
             cursor = db.connection.cursor()

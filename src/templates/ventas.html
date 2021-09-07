@@ -57,16 +57,18 @@
           </thead>
           <tbody>
             <tr class="text-center">
-              <td></td>
-              <td></td>
+              <td id="campo_nombre"></td>
+              <td id="campo_categoria"></td>
               <td>
-                <a class="btn btn-success" href="#">Quitar</a>
+                <button class="btn btn-success">
+                  Quitar
+                </button>
               </td>
             </tr>
           </tbody>
           <tbody>
             <td>Total</td>
-            <tr></tr>
+            <td id="campo_total"></td>
           </tbody>
         </table>
 
@@ -96,12 +98,37 @@
         <tbody>
           {% for p in data.productos %}
           <tr class="text-center">
-            <td>{{p.nombre}}</td>
+            <td>{{p.id_producto}}</td>
             <td>{{p.id_categoria}}</td>
             <td>{{p.precio}}</td>
             <td>
-              <a class="btn btn-success" href="#">Comprar</a>
+              <button class="btn btn-success" onclick="sendRequest()">
+                Comprar
+              </button>
             </td>
+            <script>
+              function sendRequest() {
+                let = aux = 0;
+
+                let request = new XMLHttpRequest();
+                request.open("GET", "/agregar/{{p.id_producto}}", true);
+                request.send();
+                request.onreadystatechange = function () {
+                  if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText)
+                    const producto = JSON.parse(this.responseText)
+                    //for (item of producto) {
+                    console.log(producto)
+
+                    //}
+                    //document.getElementById('campo_nombre').innerHTML = producto.nombre
+                    //document.getElementById('campo_categoria').innerHTML = producto.categoria
+                    //aux = parseFloat(producto.precio) + aux;
+                    //document.getElementById('campo_total').innerHTML = aux
+                  }
+                }
+              }
+            </script>
           </tr>
           {% endfor %}
         </tbody>
@@ -109,4 +136,7 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block customJS %}
 {% endblock %}

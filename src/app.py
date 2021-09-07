@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify
 from flask_mysqldb import MySQL
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
+import json
+
+from werkzeug.wrappers import response
 
 from src.models.ModeloCliente import ModeloCliente
 from src.models.entities.cliente import Cliente
@@ -157,6 +160,18 @@ def nueva_venta():
         'productos': productos
     }
     return render_template('ventas.html', data=data)
+
+
+@app.route("/agregar/<id_producto>")
+def agregar(id_producto):
+    producto = ModeloProducto.consultar_producto(db, id_producto)
+    response = {
+        'id': producto.id_producto,
+        'nombre': producto.nombre,
+        'categoria': producto.id_categoria,
+        'precio': float(producto.precio)
+    }
+    return jsonify(response)
 
 
 def start_app(configuration):
