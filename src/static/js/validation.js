@@ -80,8 +80,8 @@ inputs.forEach((input) => {
   input.addEventListener('blur', validarFormulario)
 });
 
-registro.addEventListener('submit', (e) => {
-  e.preventDefault();
-});
+// registro.addEventListener('click', (e) => {
+//   e.preventDefault();
+// });
 
-console.log(inputs)
+// console.log(inputs)

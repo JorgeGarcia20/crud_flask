@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
+# from flask_mail import Mail
 
 from src.models.entities.cliente import Cliente
 from src.models.entities.compra import Compra
@@ -13,11 +14,13 @@ from src.models.ModeloProveedor import ModeloProveedor
 from src.models.ModeloProducto import ModeloProducto
 from src.models.ModeloCompra import ModeloCompra
 from src.consts import *
+from .emails import bienvenida_nuevo_usuario
 
 app = Flask(__name__)
 csrf = CSRFProtect()
 db = MySQL(app)
 login_manager_app = LoginManager(app)
+# mail = Mail()
 
 
 @login_manager_app.user_loader
@@ -51,6 +54,7 @@ def logout():
 
 
 @app.route("/")
+@login_required
 def index():
     if current_user.is_authenticated:
         ventas = ModeloCompra.consultar_productos_cliente(db, current_user.id)
@@ -78,6 +82,7 @@ def registrar_cliente():
         ModeloCliente.registrar(db, nombre, apellidos, nick,
                                 password, correo, rfc, direccion)
         flash(NUEVO_CLIENTE, 'success')
+        bienvenida_nuevo_usuario(correo)
         return redirect(url_for('login'))
     else:
         flash(ALERT, 'warning')
@@ -161,6 +166,7 @@ def nueva_venta():
 
 
 @app.route("/vender_producto/<id_producto>", methods=['GET', 'POST'])
+@login_required
 def vender_producto(id_producto):
     id_cliente = current_user.id
     venta = ModeloCompra.vender(db, id_producto, id_cliente)
@@ -175,4 +181,5 @@ def vender_producto(id_producto):
 def start_app(configuration):
     app.config.from_object(configuration)
     csrf.init_app(app)
+    # mail.init_app(app)
     return app
