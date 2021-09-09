@@ -10,6 +10,7 @@
 ## Ejecución
 1. Crear un entorno virtual con el comando: virtualenv >nombre del entorno<
 2. Activar el entorno con el comando: env/Scripts/activate
-3. Copiar el path del fichero sql del proyecto, iniciar sesión en mysql desde consola y ejecutar:
+3. Instalar las librerias necesarias con el comando: pip install -r requirements.txt
+4. Copiar el path del fichero sql del proyecto, iniciar sesión en mysql desde consola y ejecutar:
     source path_del_fichero.sql
 5. Iniciar el servidor con el comando python run.py
