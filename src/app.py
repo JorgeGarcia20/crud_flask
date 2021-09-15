@@ -114,8 +114,10 @@ def agregar_producto():
         precio = request.form['precio']
         ModeloProducto.agregar_producto(
             db, nombre, marca, proveedor, categoria, precio)
+        flash(NUEVO_PRODUCTO, 'success')
         return redirect(url_for('productos'))
     else:
+        flash(ALERT, 'warning')
         return render_template('productos.html')
 
 
@@ -146,8 +148,10 @@ def editar_producto(id_producto):
         precio = request.form['precio']
         ModeloProducto.editar_producto(
             db, nombre, marca, proveedor, categoria, precio, id_producto)
+        flash(MODIFICADO, 'success')
         return redirect(url_for('productos'))
     else:
+        flash(ALERT, 'warning')
         return render_template('productos.html')
 
 
@@ -155,6 +159,7 @@ def editar_producto(id_producto):
 @login_required
 def eliminar_producto(id_producto):
     ModeloProducto.eliminar_producto(db, id_producto)
+    flash(ELIMINADO, 'success')
     return redirect(url_for('productos'))
 
 
@@ -178,8 +183,18 @@ def vender_producto(id_producto):
         return render_template('ventas.html')
 
 
+def pagina_no_encontrada(error):
+    return render_template('error/404.html'), 404
+
+
+def pagina_no_autorizada(error):
+    return redirect(url_for('login'))
+
+
 def start_app(configuration):
     app.config.from_object(configuration)
     csrf.init_app(app)
     # mail.init_app(app)
+    app.register_error_handler(401, pagina_no_autorizada)
+    app.register_error_handler(404, pagina_no_encontrada)
     return app

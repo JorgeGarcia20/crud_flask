@@ -30,8 +30,7 @@ class ModeloCliente:
     def obtener_id(self, db, id):
         try:
             cursor = db.connection.cursor()
-            query = """SELECT id, nombre, apellidos, nick, correo, rfc, direccion FROM cliente WHERE id = {0}""".format(
-                id)
+            query = f"SELECT id, nombre, apellidos, nick, correo, rfc, direccion FROM cliente WHERE id = {id}"
             cursor.execute(query)
             data = cursor.fetchone()
             logged = Cliente(data[0], data[1], data[2],

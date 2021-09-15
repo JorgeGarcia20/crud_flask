@@ -51,6 +51,26 @@
   <div class="col-md-9">
     <div class="card card-body">
       <h1 class="text-center">Lista de Productos</h1>
+
+      {% with messages = get_flashed_messages(with_categories = True) %}
+      {% if messages %}
+      <br>
+      {% for category, message in messages %}
+      {% if category == 'warning' %}
+      <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
       <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
           <tr>
@@ -82,4 +102,7 @@
   </div>
 </div>
 <!-- </div> -->
+{% endblock %}
+{% block customJS%}
+<script src="{{url_for('static', filename='js/eliminar_producto.js')}}"></script>
 {% endblock %}
