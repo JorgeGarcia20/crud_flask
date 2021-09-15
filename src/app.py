@@ -3,12 +3,13 @@ from flask_mysqldb import MySQL
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
+from src.models.ModeloSeleccion import ModeloSeleccion
 # from flask_mail import Mail
 
-from src.models.entities.cliente import Cliente
+from src.models.entities.usuario import Usuario
 from src.models.entities.compra import Compra
-
-from src.models.ModeloCliente import ModeloCliente
+from src.models.ModeloVenta import ModeloVenta
+from src.models.ModeloUsuario import ModeloUsuario
 from src.models.ModeloCategoria import ModeloCategoria
 from src.models.ModeloProveedor import ModeloProveedor
 from src.models.ModeloProducto import ModeloProducto
@@ -25,16 +26,16 @@ login_manager_app = LoginManager(app)
 
 @login_manager_app.user_loader
 def load_user(id):
-    return ModeloCliente.obtener_id(db, id)
+    return ModeloUsuario.obtener_id(db, id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # CSRF (Cross-site Request Forgery): Solicitud de falsificación entre sitios.
     if request.method == 'POST':
-        usuario = Cliente(
-            None, None, None, request.form['nick'], request.form['password'], None, None, None)
-        usuario_logeado = ModeloCliente.login(db, usuario)
+        usuario = Usuario(
+            None, None, None, request.form['nick'], request.form['password'], None)
+        usuario_logeado = ModeloUsuario.login(db, usuario)
         if usuario_logeado != None:
             login_user(usuario_logeado)
             flash(BIENVENIDA, 'success')
@@ -57,7 +58,7 @@ def logout():
 @login_required
 def index():
     if current_user.is_authenticated:
-        ventas = ModeloCompra.consultar_productos_cliente(db, current_user.id)
+        ventas = ModeloVenta.productos(db)
         return render_template('index.html', data=ventas)
     else:
         return redirect(url_for('login'))
@@ -76,11 +77,8 @@ def registrar_cliente():
         nick = request.form['nick']
         password = generate_password_hash(request.form['password'])
         correo = request.form['correo']
-        rfc = request.form['rfc']
-        direccion = request.form['direccion']
-
-        ModeloCliente.registrar(db, nombre, apellidos, nick,
-                                password, correo, rfc, direccion)
+        ModeloUsuario.registrar(db, nombre, apellidos, nick,
+                                password, correo)
         flash(NUEVO_CLIENTE, 'success')
         bienvenida_nuevo_usuario(correo)
         return redirect(url_for('login'))
@@ -167,19 +165,53 @@ def eliminar_producto(id_producto):
 @login_required
 def nueva_venta():
     productos = ModeloProducto.consultar_productos(db)
-    return render_template('ventas.html', data=productos)
+    detalle_productos = ModeloSeleccion.detalle_producto(db)
+
+    sumatoria = []
+    for d in detalle_productos:
+        sumatoria.append(float(d.precio))
+    total = ModeloProducto.sumar_precios(sumatoria)
+
+    data = {
+        'productos': productos,
+        'detalle_productos': detalle_productos,
+        'total': total
+    }
+
+    return render_template('ventas.html', data=data)
 
 
-@app.route("/vender_producto/<id_producto>", methods=['GET', 'POST'])
+@app.route("/seleccionar_producto/<id_producto>", methods=['GET', 'POST'])
 @login_required
-def vender_producto(id_producto):
-    id_cliente = current_user.id
-    venta = ModeloCompra.vender(db, id_producto, id_cliente)
-    if venta == None:
+def seleccionar_producto(id_producto):
+    ModeloSeleccion.producto_seleccionado(db, id_producto)
+    return redirect(url_for('nueva_venta'))
+
+
+@app.route("/eliminar_seleccion/<id_producto>", methods=['GET', 'POST'])
+@login_required
+def eliminar_seleccion(id_seleccion):
+    ModeloSeleccion.eliminar_seleccion(db, id_seleccion)
+    return redirect(url_for('nueva_venta'))
+
+
+@app.route("/guardar_venta", methods=['GET', 'POST'])
+@login_required
+def guardar_venta():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellidos = request.form['apellidos']
+        correo = request.form['correo']
+        rfc = request.form['rfc']
+        direccion = request.form['direccion']
+        total = request.form['total']
+        ModeloVenta.nueva_venta(
+            db, nombre, apellidos, correo, rfc, direccion, total)
+        ModeloSeleccion.vaciar_tabla(db)
         flash(NUEVA_VENTA, 'success')
         return redirect(url_for('nueva_venta'))
     else:
-        flash(ERROR_VENTA, 'warning')
+        flash(ALERT, 'warning')
         return render_template('ventas.html')
 
 

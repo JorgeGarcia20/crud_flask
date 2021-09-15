@@ -5,9 +5,9 @@ const expresiones = {
   nombre_apellidos: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
   nick: /^[a-zA-Z0-9\_\-]{4,16}$/, // Letras, numeros, guion y guion_bajo
   password: /^.{4,12}$/, // 4 a 12 digitos.
-  rfc: /^[A-Z0-9]{10}$/, // Letras, numeros, guion y guion_bajo
+  // rfc: /^[A-Z0-9]{10}$/, // Letras, numeros, guion y guion_bajo
   correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-  direccion: /^[a-zA-ZÀ-ÿ\s\/]{10,100}$/, // Letras y espacios, pueden llevar acentos.
+  // direccion: /^[a-zA-ZÀ-ÿ\s\/]{10,100}$/, // Letras y espacios, pueden llevar acentos.
 }
 
 const validarFormulario = (e) => {
@@ -35,14 +35,6 @@ const validarFormulario = (e) => {
 
     case "correo":
       validarCampo(expresiones.correo, e.target, 'correo')
-      break;
-
-    case "rfc":
-      validarCampo(expresiones.rfc, e.target, 'rfc')
-      break;
-
-    case "direccion":
-      validarCampo(expresiones.direccion, e.target, 'direccion')
       break;
   }
 }

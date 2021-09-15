@@ -21,10 +21,7 @@ class ModeloProducto:
     def consultar_productos(self, db):
         try:
             cursor = db.connection.cursor()
-            query = """SELECT producto.id_producto, producto.nombre, producto.marca, proveedor.nombre, categoria.nombre, producto.precio 
-                        FROM producto 
-                        JOIN proveedor ON producto.id_proveedor = proveedor.id_proveedor 
-                        JOIN categoria ON producto.id_categoria = categoria.id_categoria"""
+            query = """SELECT producto.id_producto, producto.nombre, producto.marca, proveedor.nombre, categoria.nombre, producto.precio FROM producto JOIN proveedor ON producto.id_proveedor = proveedor.id_proveedor JOIN categoria ON producto.id_categoria = categoria.id_categoria"""
             cursor.execute(query)
             data = cursor.fetchall()
             productos = []
@@ -88,3 +85,10 @@ class ModeloProducto:
             db.connection.commit()
         except Exception as ex:
             raise Exception(ex)
+
+    @classmethod
+    def sumar_precios(self, lista):
+        total = 0
+        for i in lista:
+            total += i
+        return total

@@ -1,16 +1,14 @@
-DROP DATABASE IF EXISTS tienda_test;
-CREATE DATABASE tienda_test CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE tienda_test;
+DROP DATABASE IF EXISTS tienda_test2;
+CREATE DATABASE tienda_test2 CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE tienda_test2;
 
-CREATE TABLE cliente(
+CREATE TABLE usuario(
   id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(30) NOT NULL,
   apellidos VARCHAR(50) NOT NULL,
   nick VARCHAR(20) NOT NULL,
   password CHAR(120) NOT NULL,
   correo VARCHAR(60) NOT NULL,
-  rfc VARCHAR(10) NOT NULL,
-  direccion VARCHAR(250) NOT NULL,
   PRIMARY KEY(id)
 );
 
@@ -38,37 +36,34 @@ CREATE TABLE producto(
   PRIMARY KEY(id_producto)
 );
 
+CREATE TABLE seleccion(
+  id_seleccion INT NOT NULL AUTO_INCREMENT,
+  id_producto INT NOT NULL, 
+  FOREIGN KEY(id_producto) REFERENCES producto(id_producto),
+  PRIMARY KEY(id_seleccion)
+);
+
+-- CREATE TABLE detalle_venta(
+--   id_detalle_venta INT NOT NULL AUTO_INCREMENT,
+--   id_nueva_venta INT NOT NULL,
+--   fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY(id_nueva_venta) REFERENCES nueva_venta(id_nueva_venta),
+--   PRIMARY KEY(id_detalle_venta)
+-- );
+
 CREATE TABLE venta(
-  id_venta INT NOT NULL AUTO_INCREMENT,
-  fecha DATETIME NOT NULL,
-  factura TINYINT(1) NOT NULL,
-  total DECIMAL(5,2),
-  PRIMARY KEY(id_venta)
+  id_nueva_venta INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(30) NOT NULL,
+  apellidos VARCHAR(60) NOT NULL,
+  correo VARCHAR(50) NOT NULL,
+  rfc VARCHAR(10) NOT NULL,
+  direccion VARCHAR(200) NOT NULL,
+  total DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY(id_nueva_venta)
 );
 
-CREATE TABLE detalle_venta(
-  id_detalle_venta INT NOT NULL AUTO_INCREMENT,
-  id_venta INT NOT NULL,
-  id_cliente INT NOT NULL,
-  id_producto INT NOT NULL,
-  FOREIGN KEY(id_venta) REFERENCES venta(id_venta),
-  FOREIGN KEY(id_cliente) REFERENCES cliente(id),
-  FOREIGN KEY(id_producto) REFERENCES producto(id_producto),
-  PRIMARY KEY(id_detalle_venta)
-);
-
-CREATE TABLE compra(
-  id_compra INT NOT NULL AUTO_INCREMENT,
-  id_producto INT NOT NULL,
-  id_cliente INT NOT NULL,
-  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(id_producto) REFERENCES producto(id_producto),
-  FOREIGN KEY(id_cliente) REFERENCES cliente(id),
-  PRIMARY KEY(id_compra)
-);
-
-INSERT INTO cliente(nombre, apellidos, nick, password, correo, rfc, direccion)
-VALUE ('Jorge', 'Garcia Estrada', 'jorgegarcia', 'pbkdf2:sha256:260000$JJVqzW0AXKMuUQXr$ec2795ab8a7ae82df79eee2e477fc405524d66fbcb867fe16c81d227a7aac0b6', 'jorge@outlook.com', 'GAEJ991020', 'Francisco Villa s/n Tepetzongo');
+INSERT INTO usuario(nombre, apellidos, nick, password, correo)
+VALUE ('Jorge', 'Garcia Estrada', 'jorgegarcia', 'pbkdf2:sha256:260000$JJVqzW0AXKMuUQXr$ec2795ab8a7ae82df79eee2e477fc405524d66fbcb867fe16c81d227a7aac0b6', 'jorge@outlook.com');
 
 INSERT INTO proveedor(nombre) VALUES
 ('Bimbo SA de CV'), 

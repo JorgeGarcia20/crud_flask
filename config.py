@@ -10,7 +10,7 @@ class DevelopmentConfig(Configuration):
     MYSQL_HOST = 'localhost'
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'secret'
-    MYSQL_DB = 'tienda_test'
+    MYSQL_DB = 'tienda_test2'
     MAIL_SERVER = 'mstp.googlemail.com'
     MAIL_POST = 587
     MAIL_USE_TLS = True
