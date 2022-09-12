@@ -1,4 +1,4 @@
-from decouple import config
+# from decouple import config
 
 
 class Configuration:
@@ -14,8 +14,8 @@ class DevelopmentConfig(Configuration):
     MAIL_SERVER = 'mstp.googlemail.com'
     MAIL_POST = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'fulanotest00@gmail.com'
-    MAIL_PASSOWORD = 'MySuperSecret'
+    MAIL_USERNAME = ''
+    MAIL_PASSOWORD = ''
     # 'config('MAIL_PASSWORD')'
 
 

@@ -1,14 +1,14 @@
-import smtplib
-from decouple import config
+# import smtplib
+# from decouple import config
 
 
-def bienvenida_nuevo_usuario(correo):
-    message = "Hola. bienvenido a mi pequeña tienda".encode('utf-8').strip()
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login('fulanotest00@gmail.com', config('MAIL_PASSWORD'))
-    server.sendmail('fulanotest00@gmail.com', correo, message)
-    server.quit()
+# def bienvenida_nuevo_usuario(correo):
+#     message = "Hola. bienvenido a mi pequeña tienda".encode('utf-8').strip()
+#     server = smtplib.SMTP('smtp.gmail.com', 587)
+#     server.starttls()
+#     server.login('fulanotest00@gmail.com', config('MAIL_PASSWORD'))
+#     server.sendmail('fulanotest00@gmail.com', correo, message)
+#     server.quit()
 
 # from flask_mail import Message
 # from flask import current_app, render_template
